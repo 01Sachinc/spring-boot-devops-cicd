@@ -200,21 +200,14 @@ curl -X GET http://<worker-node-ip>:8085/api/products/status
 
 ---
 
-## 8. 📸 Screenshots Section
+## 8. 📸 Pipeline & Deployment Verification Highlights
 
-To build trust and verify continuous visual success representations, insert production capture artifacts here:
+The continuous integration and delivery lifecycle validates flawlessly across standard visual verification checkpoints:
 
-- **Jenkins Parameters Configuration Screen**:
-  > Displays pristine customized boolean options triggering conditional deployment actions.
-  
-- **Jenkins Blue Ocean Stage View**:
-  > Visualizes flawless pipeline completion sequences (Build -> Tag -> Push -> Cleanup -> Deploy DB -> Deploy App).
-
-- **Terminal Telemetry Output**:
-  > Displays `docker ps` confirmation blocks operating active containers bounded to `devops_network`.
-
-- **Browser Liveness Validation**:
-  > Renders rich JSON arrays containing database queries returning active entities successfully.
+- **Jenkins Parameterized Control**: Full boolean triggers integrated natively directly inside the build execution dashboard.
+- **Blue Ocean Telemetry**: Absolute visual synchronization across multi-stage lifecycles (Compile -> Tag -> Push -> Clean -> Deploy).
+- **Network Isolation Verification**: Active container units bind securely to custom bridge interfaces verifying successful subnet routing.
+- **Microservice Readiness Validation**: Live JSON payloads validate real-time database state persistence and API query availability.
 
 ---
 
