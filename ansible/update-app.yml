@@ -1,0 +1,35 @@
+---
+- name: Rolling Update Spring Boot Application Container on Worker Node
+  hosts: workernodes
+  become: yes
+  vars:
+    network_name: devops_network
+    app_container_name: spring-boot-app
+    target_image: "01sachinc/spring-boot-devops-cicd:latest"
+    app_port: "8085"
+    db_host: "mysql-container"
+    db_port: "3306"
+    db_name: "devops_db"
+    db_user: "devops_user"
+    db_password: "DevopsSecure@123"
+
+  tasks:
+    - name: Pull the updated Spring Boot application Docker image
+      community.docker.docker_image:
+        name: "{{ target_image }}"
+        source: pull
+
+    - name: Update Spring Boot Application container (Recreates container with updated image)
+      community.docker.docker_container:
+        name: "{{ app_container_name }}"
+        image: "{{ target_image }}"
+        state: started
+        restart_policy: unless-stopped
+        networks:
+          - name: "{{ network_name }}"
+        ports:
+          - "{{ app_port }}:8085"
+        env:
+          SPRING_DATASOURCE_URL: "jdbc:mysql://{{ db_host }}:{{ db_port }}/{{ db_name }}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+          SPRING_DATASOURCE_USERNAME: "{{ db_user }}"
+          SPRING_DATASOURCE_PASSWORD: "{{ db_password }}"

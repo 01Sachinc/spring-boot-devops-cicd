@@ -1,0 +1,49 @@
+---
+- name: Deploy MySQL Database Container on Worker Node
+  # Targeting 'workernodes' group defined in our inventory or system hosts file
+  hosts: workernodes
+  become: yes
+  vars:
+    network_name: devops_network
+    db_container_name: mysql-container
+    db_image: mysql:8.0
+    db_port: "3306"
+    db_root_password: DevopsRootSecurePassword!
+    db_name: devops_db
+    db_user: devops_user
+    db_password: DevopsSecure@123
+    db_volume: mysql_data_volume
+
+  tasks:
+    - name: Ensure custom Docker network exists on worker node
+      community.docker.docker_network:
+        name: "{{ network_name }}"
+        state: present
+
+    - name: Ensure persistent Docker volume exists for database data
+      community.docker.docker_volume:
+        name: "{{ db_volume }}"
+        state: present
+
+    - name: Pull MySQL 8 Docker image
+      community.docker.docker_image:
+        name: "{{ db_image }}"
+        source: pull
+
+    - name: Run MySQL Database container
+      community.docker.docker_container:
+        name: "{{ db_container_name }}"
+        image: "{{ db_image }}"
+        state: started
+        restart_policy: unless-stopped
+        networks:
+          - name: "{{ network_name }}"
+        ports:
+          - "{{ db_port }}:3306"
+        volumes:
+          - "{{ db_volume }}:/var/lib/mysql"
+        env:
+          MYSQL_ROOT_PASSWORD: "{{ db_root_password }}"
+          MYSQL_DATABASE: "{{ db_name }}"
+          MYSQL_USER: "{{ db_user }}"
+          MYSQL_PASSWORD: "{{ db_password }}"

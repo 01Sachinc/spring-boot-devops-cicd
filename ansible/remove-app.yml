@@ -1,0 +1,12 @@
+---
+- name: Remove Spring Boot Application Container from Worker Node
+  hosts: workernodes
+  become: yes
+  vars:
+    app_container_name: spring-boot-app
+
+  tasks:
+    - name: Ensure Application container is stopped and removed
+      community.docker.docker_container:
+        name: "{{ app_container_name }}"
+        state: absent
