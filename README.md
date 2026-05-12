@@ -15,11 +15,12 @@ A production-ready, highly professional **End-to-End DevOps CI/CD pipeline archi
 1. [Project Overview](#1-project-overview)
 2. [Architecture Diagram](#2-architecture-diagram)
 3. [CI/CD Workflow & Deployment Flow](#3-cicd-workflow--deployment-flow)
+   - [Project Folder Structure](#-project-folder-structure)
 4. [Tools & Technologies Used](#4-tools--technologies-used)
 5. [Security Best Practices](#5-security-best-practices)
 6. [Installation & Setup Steps](#6-installation--setup-steps)
 7. [Step-by-Step Deployment Guide](#7-step-by-step-deployment-guide)
-8. [Screenshots Section](#8-screenshots-section)
+8. [Pipeline & Deployment Verification Highlights](#8-pipeline--deployment-verification-highlights)
 9. [Troubleshooting Guide](#9-troubleshooting-guide)
 10. [Future Improvements](#10-future-improvements)
 
@@ -113,6 +114,38 @@ The end-to-end continuous integration and delivery lifecycle operates perfectly 
 6. **Local Node Cleanup**: Built intermediate images on the master node are dropped cleanly using `docker rmi` to prevent filesystem saturation.
 7. **Ansible Orchestration Execution**: Jenkins delegates remote container setup to Ansible playbooks running locally over SSH.
 8. **Live Liveness Access**: The container spins up inside `devops_network`, resolves database connection details via internal Docker DNS, runs SQL migrations using Hibernate auto-ddl, and serves external REST web traffic on port `8085`.
+
+---
+
+## 📂 Project Folder Structure
+
+The repository maintains an enterprise-grade standard source layout decoupling backend logic, container configuration, and infrastructure orchestration scripts:
+
+```text
+spring-boot-devops-cicd/
+├── src/
+│   └── main/
+│       ├── java/com/devops/cicd/
+│       │   ├── DevopsApplication.java             # Spring Boot Main Entry Point
+│       │   ├── controller/ProductController.java  # REST API Endpoints
+│       │   ├── entity/Product.java                # JPA Domain Entity Model
+│       │   └── repository/ProductRepository.java  # Database Repository Interface
+│       └── resources/
+│           └── application.properties             # Dynamic Environment Variables Overrides
+├── ansible/
+│   ├── deploy-app.yml                             # Application Deployment Playbook
+│   ├── deploy-db.yml                              # MySQL Database Deployment Playbook
+│   ├── remove-app.yml                             # Container Lifecycle Cleanup Playbook
+│   ├── remove-db.yml                              # Storage/DB Teardown Playbook
+│   ├── update-app.yml                             # Rolling Update Playbook
+│   └── inventory/
+│       └── hosts                                  # Remote SSH Node Target Configurations
+├── Dockerfile                                     # Production Multi-Stage Base Layout
+├── Jenkinsfile                                    # Parameterized Declarative Pipeline Code
+├── pom.xml                                        # Maven Build/Dependency Declarations
+├── README.md                                      # Comprehensive Architecture & Operations Manual
+└── LINUX_SETUP_COMMANDS.md                        # Step-by-Step Bare-Metal Setup Instructions
+```
 
 ---
 
